@@ -1,6 +1,10 @@
 <template>
   <div>
-    <AddItemCard placeholder="Введите значение tasks" />
+    <div class="flex gap-4">
+      <AddItemCard placeholder="Введите значение tasks" />
+      <AddItemCard placeholder="Введите значение dates" />
+      <AddItemCard placeholder="Введите значение statuses" />
+    </div>
   </div>
 </template>
 

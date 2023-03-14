@@ -1,5 +1,7 @@
 <template>
-  <div class="bg-white rounded-md shadow-md">
+  <div
+    class="bg-white rounded-md shadow-md flex flex-col items-center gap-4 w-80 p-4"
+  >
     <PrimaryInput
       :placeholder="props.placeholder"
       v-model="inputValue"
