@@ -10,7 +10,10 @@
         type="date"
         @create-item="onDateCreated"
       />
-      <AddItemCard placeholder="Введите значение statuses" />
+      <AddItemCard
+        placeholder="Введите значение statuses"
+        @create-item="onStatusCreated"
+      />
     </div>
     <div class="flex gap-4">
       <ul>
@@ -18,6 +21,9 @@
       </ul>
       <ul>
         <li v-for="date in dates" :key="date.id">{{ date.value }}</li>
+      </ul>
+      <ul>
+        <li v-for="status in statuses" :key="status.id">{{ status.value }}</li>
       </ul>
     </div>
   </div>
@@ -29,14 +35,18 @@ import { useMainStore } from "../store";
 import AddItemCard from "./AddItemCard.vue";
 
 const store = useMainStore();
-const { tasks, dates } = storeToRefs(store);
+const { tasks, dates, statuses } = storeToRefs(store);
 
 const onTaskCreated = (task: string) => {
-  store.createTask(task);
+  const { data, error } = store.createTask(task);
 };
 
 const onDateCreated = (date: Date) => {
   store.createDate(date);
+};
+
+const onStatusCreated = (status: string) => {
+  store.createStatus(status);
 };
 </script>
 

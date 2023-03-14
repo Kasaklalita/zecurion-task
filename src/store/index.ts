@@ -38,5 +38,16 @@ export const useMainStore = defineStore("main", {
       this.dates.push(dateToCreate);
       return { data: dateToCreate, error: null };
     },
+    createStatus(status: string) {
+      if (!status.trim()) {
+        return { data: null, error: "Статус не должен быть пустым." };
+      }
+      const statusToCreate: Status = {
+        id: ++this.statusId,
+        value: status,
+      };
+      this.statuses.push(statusToCreate);
+      return { data: statusToCreate, error: null };
+    },
   },
 });
