@@ -7,7 +7,7 @@
       v-model="inputValue"
       @update:modelValue="onInputValueUpdated"
     />
-    <PrimaryButton text="Добавить" />
+    <PrimaryButton text="Добавить" @click="onItemCreated" />
   </div>
 </template>
 
@@ -21,12 +21,16 @@ interface IAddItemCardProps {
 }
 
 const props = defineProps<IAddItemCardProps>();
+const emits = defineEmits(["create-item"]);
 
 const inputValue = ref("");
 
 const onInputValueUpdated = (newValue: string) => {
   inputValue.value = newValue;
-  console.log(inputValue.value);
+};
+
+const onItemCreated = () => {
+  emits("create-item", inputValue.value);
 };
 </script>
 

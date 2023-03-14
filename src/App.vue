@@ -1,15 +1,13 @@
 <template>
   <div>
-    <div class="flex gap-4">
-      <AddItemCard placeholder="Введите значение tasks" />
-      <AddItemCard placeholder="Введите значение dates" />
-      <AddItemCard placeholder="Введите значение statuses" />
-    </div>
+    <CreationCards />
+    <MainTable />
   </div>
 </template>
 
 <script setup lang="ts">
-import AddItemCard from "./components/AddItemCard.vue";
+import CreationCards from "./components/CreationCards.vue";
+import MainTable from "./components/MainTable.vue";
 </script>
 
 <style scoped></style>
