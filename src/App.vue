@@ -1,9 +1,11 @@
 <template>
   <div>
-    <h1>asdf</h1>
+    <AddItemCard placeholder="Введите значение tasks" />
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import AddItemCard from "./components/AddItemCard.vue";
+</script>
 
 <style scoped></style>
