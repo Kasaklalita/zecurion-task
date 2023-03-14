@@ -31,22 +31,40 @@
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
+import { useToast } from "vue-toastification";
 import { useMainStore } from "../store";
 import AddItemCard from "./AddItemCard.vue";
+
+const toast = useToast();
 
 const store = useMainStore();
 const { tasks, dates, statuses } = storeToRefs(store);
 
 const onTaskCreated = (task: string) => {
   const { data, error } = store.createTask(task);
+  if (!data || error) {
+    toast.error(error ?? "Что-то пошло не так");
+    return;
+  }
+  toast.success("Задача успешно создана");
 };
 
 const onDateCreated = (date: Date) => {
-  store.createDate(date);
+  const { data, error } = store.createDate(date);
+  if (!data || error) {
+    toast.error(error ?? "Что-то пошло не так");
+    return;
+  }
+  toast.success("Дата успешно создана");
 };
 
 const onStatusCreated = (status: string) => {
-  store.createStatus(status);
+  const { data, error } = store.createStatus(status);
+  if (!data || error) {
+    toast.error(error ?? "Что-то пошло не так");
+    return;
+  }
+  toast.success("Статус успешно создан");
 };
 </script>
 
