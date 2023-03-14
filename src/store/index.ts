@@ -1,29 +1,29 @@
 import { defineStore } from "pinia";
-import { DateType, Task, Status } from "./types";
+import { v4 as uuidv4 } from "uuid";
+import { IDate, ITask, IStatus, IEvent } from "./types";
 
 type ActionReturn = {
-  data: Task | DateType | Status | null;
+  data: ITask | IDate | IStatus | null;
   error: string | null;
 };
 
 export const useMainStore = defineStore("main", {
   state: () => ({
-    tasks: <Task[]>[],
-    dates: <DateType[]>[],
-    statuses: <Status[]>[],
-    taskId: 0,
-    dateId: 0,
-    statusId: 0,
+    tasks: <ITask[]>[],
+    dates: <IDate[]>[],
+    statuses: <IStatus[]>[],
+    events: <IEvent[]>[],
   }),
   actions: {
     createTask(task: string): ActionReturn {
       if (!task.trim()) {
         return { data: null, error: "Имя задачи не должно быть пустым." };
       }
-      const taskToCreate: Task = {
-        id: ++this.taskId,
+      const taskToCreate: ITask = {
+        id: uuidv4(),
         title: task,
       };
+      console.log(taskToCreate);
       this.tasks.push(taskToCreate);
       return { data: taskToCreate, error: null };
     },
@@ -31,31 +31,34 @@ export const useMainStore = defineStore("main", {
       if (!date.toString()) {
         return { data: null, error: "Дата не должна быть пустой." };
       }
-      const dateToCreate: DateType = {
-        id: ++this.dateId,
+      const dateToCreate: IDate = {
+        id: uuidv4(),
         value: date,
       };
       this.dates.push(dateToCreate);
       return { data: dateToCreate, error: null };
     },
-    createStatus(status: string) {
-      if (!status.trim()) {
+    createStatus(IStatus: string) {
+      if (!IStatus.trim()) {
         return { data: null, error: "Статус не должен быть пустым." };
       }
-      const statusToCreate: Status = {
-        id: ++this.statusId,
-        value: status,
+      const IStatusToCreate: IStatus = {
+        id: uuidv4(),
+        value: IStatus,
       };
-      if (this.getStatusByName(statusToCreate.value)) {
+      if (this.getStatusByName(IStatusToCreate.value)) {
         return { data: null, error: "Такой статус уже существует." };
       }
-      this.statuses.push(statusToCreate);
-      return { data: statusToCreate, error: null };
+      this.statuses.push(IStatusToCreate);
+      return { data: IStatusToCreate, error: null };
     },
     getStatusByName(name: string) {
-      return this.statuses.find((status: Status) => {
-        return status.value === name;
+      return this.statuses.find((IStatus: IStatus) => {
+        return IStatus.value === name;
       });
+    },
+    createEvent(taskId: string, dateId: string, IStatusId: string) {
+      return { data: null, error: null };
     },
   },
 });

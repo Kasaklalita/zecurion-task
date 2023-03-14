@@ -2,15 +2,17 @@
   <td
     class="p-2 w-32 text-center font-normal border border-[#d9d9d9]"
     @click="onClick"
-  ></td>
+  >
+    <div v-if="isClicked"></div>
+  </td>
 </template>
 
 <script setup lang="ts">
 import { ref, defineProps } from "vue";
 
 interface ITableBodyCellProps {
-  dateId: number;
-  taskId: number;
+  dateId: string;
+  taskId: string;
 }
 
 const props = defineProps<ITableBodyCellProps>();

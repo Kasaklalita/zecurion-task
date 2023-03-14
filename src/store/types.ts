@@ -1,21 +1,21 @@
-export interface Task {
-  id: number;
+export interface ITask {
+  id: string;
   title: string;
 }
 
-export interface DateType {
-  id: number;
+export interface IDate {
+  id: string;
   value: Date;
 }
 
-export interface Status {
-  id: number;
+export interface IStatus {
+  id: string;
   value: string;
 }
 
-export interface Event {
-  id: number;
-  taskId: number;
-  dateId: number;
-  statusId: number;
+export interface IEvent {
+  id: string;
+  taskId: string;
+  dateId: string;
+  statusId: string;
 }

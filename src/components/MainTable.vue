@@ -26,19 +26,19 @@ import { storeToRefs } from "pinia";
 import { useMainStore } from "../store";
 import TableHeaderCell from "./TableHeaderCell.vue";
 import TableBodyCell from "./TableBodyCell.vue";
-import { DateType } from "../store/types";
+import { IDate } from "../store/types";
 
 const store = useMainStore();
 const { tasks, dates } = storeToRefs(store);
 
 const datesList = computed(() => {
-  return dates.value.map((date: DateType) => ({
+  return dates.value.map((date: IDate) => ({
     id: date.id,
     value: date.value.toString(),
   }));
 });
 
-const eventsTable;
+// const eventsTable;
 </script>
 
 <style scoped></style>
