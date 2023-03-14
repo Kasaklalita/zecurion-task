@@ -5,6 +5,7 @@
     <PrimaryInput
       :placeholder="props.placeholder"
       v-model="inputValue"
+      :type="props.type"
       @update:modelValue="onInputValueUpdated"
     />
     <PrimaryButton text="Добавить" @click="onItemCreated" />
@@ -18,9 +19,12 @@ import PrimaryInput from "./PrimaryInput.vue";
 
 interface IAddItemCardProps {
   placeholder: string;
+  type?: string;
 }
 
-const props = defineProps<IAddItemCardProps>();
+const props = withDefaults(defineProps<IAddItemCardProps>(), {
+  type: "text",
+});
 const emits = defineEmits(["create-item"]);
 
 const inputValue = ref("");
