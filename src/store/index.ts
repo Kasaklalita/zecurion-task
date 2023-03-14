@@ -46,8 +46,16 @@ export const useMainStore = defineStore("main", {
         id: ++this.statusId,
         value: status,
       };
+      if (this.getStatusByName(statusToCreate.value)) {
+        return { data: null, error: "Такой статус уже существует." };
+      }
       this.statuses.push(statusToCreate);
       return { data: statusToCreate, error: null };
+    },
+    getStatusByName(name: string) {
+      return this.statuses.find((status: Status) => {
+        return status.value === name;
+      });
     },
   },
 });

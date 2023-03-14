@@ -10,7 +10,12 @@
     </tr>
     <tr v-for="task in tasks" :key="task.id">
       <TableHeaderCell :value="task.title" />
-      <TableBodyCell v-for="date in datesList" :key="date.id" />
+      <TableBodyCell
+        v-for="date in datesList"
+        :key="date.id"
+        :date-id="date.id"
+        :task-id="task.id"
+      />
     </tr>
   </table>
 </template>
@@ -21,18 +26,19 @@ import { storeToRefs } from "pinia";
 import { useMainStore } from "../store";
 import TableHeaderCell from "./TableHeaderCell.vue";
 import TableBodyCell from "./TableBodyCell.vue";
-import { DateType, Task } from "../store/types";
+import { DateType } from "../store/types";
 
 const store = useMainStore();
 const { tasks, dates } = storeToRefs(store);
 
 const datesList = computed(() => {
-  console.log("datesLIst");
   return dates.value.map((date: DateType) => ({
     id: date.id,
     value: date.value.toString(),
   }));
 });
+
+const eventsTable;
 </script>
 
 <style scoped></style>

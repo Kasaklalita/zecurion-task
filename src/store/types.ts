@@ -12,3 +12,10 @@ export interface Status {
   id: number;
   value: string;
 }
+
+export interface Event {
+  id: number;
+  taskId: number;
+  dateId: number;
+  statusId: number;
+}
