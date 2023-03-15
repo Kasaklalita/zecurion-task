@@ -23,13 +23,25 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { storeToRefs } from "pinia";
-import { useMainStore } from "../store";
+import { useTasksStore } from "../store/tasks";
 import TableHeaderCell from "./TableHeaderCell.vue";
 import TableBodyCell from "./TableBodyCell.vue";
 import { IDate } from "../store/types";
+import { useDatesStore } from "../store/dates";
+import { useStatusesStore } from "../store/statuses";
+import { useEventsStore } from "../store/events";
 
-const store = useMainStore();
-const { tasks, dates } = storeToRefs(store);
+// const store = useMainStore();
+// const { tasks, dates } = storeToRefs(store);
+const tasksStore = useTasksStore();
+const datesStore = useDatesStore();
+const statusesStore = useStatusesStore();
+const eventsStore = useEventsStore();
+
+const { tasks } = storeToRefs(tasksStore);
+const { dates } = storeToRefs(datesStore);
+const { statuses } = storeToRefs(statusesStore);
+const { events } = storeToRefs(eventsStore);
 
 const datesList = computed(() => {
   return dates.value.map((date: IDate) => ({

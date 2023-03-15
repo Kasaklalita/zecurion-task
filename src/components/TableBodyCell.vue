@@ -3,30 +3,60 @@
     class="p-2 w-32 text-center font-normal border border-[#d9d9d9]"
     @click="onClick"
   >
-    <div v-if="isClicked"></div>
+    <div v-if="!event.id">Создать</div>
+    <div v-else>-</div>
   </td>
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps } from "vue";
+import { ref, defineProps, reactive } from "vue";
+import { storeToRefs } from "pinia";
+import { useToast } from "vue-toastification";
+import { useMainStore } from "../store";
+import { IEvent } from "../store/types";
+
+const toast = useToast();
 
 interface ITableBodyCellProps {
   dateId: string;
   taskId: string;
+  event?: IEvent | null;
 }
 
 const props = defineProps<ITableBodyCellProps>();
 
-const isClicked = ref(false);
+const store = useMainStore();
+const { events } = storeToRefs(store);
 
-console.log(`init ${props.taskId} ${props.dateId}`);
+const event = reactive<IEvent | Partial<IEvent>>({ id: "" });
+
 const onClick = () => {
-  if (isClicked.value) {
-    console.log("second click");
+  // Если события в данной ячейке не существует
+  if (!event.id) {
+    const { data, error } = store.createEvent(
+      props.taskId,
+      props.dateId,
+      "123"
+    );
+    if (!data || error) {
+      toast.error(error ?? "Что-то пошло не так");
+      return;
+    }
+    toast.success("Событие успешно создано");
+    event.dateId = data.dateId;
+    event.taskId = data.taskId;
+    event.id = data.id;
+    event.statusId = data.statusId;
   } else {
-    console.log("first click");
-    isClicked.value = true;
+    // Если событие существует
   }
+
+  // if (event) {
+  //   console.log("second click");
+  // } else {
+  //   console.log("first click");
+  //   isClicked.value = true;
+  // }
 };
 </script>
 

@@ -32,16 +32,21 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useToast } from "vue-toastification";
-import { useMainStore } from "../store";
+import { useDatesStore } from "../store/dates";
+import { useStatusesStore } from "../store/statuses";
+import { useTasksStore } from "../store/tasks";
 import AddItemCard from "./AddItemCard.vue";
 
 const toast = useToast();
 
-const store = useMainStore();
-const { tasks, dates, statuses } = storeToRefs(store);
+// const store = useMainStore();
+// const { tasks, dates, statuses } = storeToRefs(store);
+const tasksStore = useTasksStore();
+const datesStore = useDatesStore();
+const statusesStore = useStatusesStore();
 
 const onTaskCreated = (task: string) => {
-  const { data, error } = store.createTask(task);
+  const { data, error } = tasksStore.createTask(task);
   if (!data || error) {
     toast.error(error ?? "Что-то пошло не так");
     return;
@@ -50,7 +55,7 @@ const onTaskCreated = (task: string) => {
 };
 
 const onDateCreated = (date: Date) => {
-  const { data, error } = store.createDate(date);
+  const { data, error } = datesStore.createDate(date);
   if (!data || error) {
     toast.error(error ?? "Что-то пошло не так");
     return;
@@ -59,7 +64,7 @@ const onDateCreated = (date: Date) => {
 };
 
 const onStatusCreated = (status: string) => {
-  const { data, error } = store.createStatus(status);
+  const { data, error } = statusesStore.createStatus(status);
   if (!data || error) {
     toast.error(error ?? "Что-то пошло не так");
     return;
