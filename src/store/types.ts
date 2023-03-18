@@ -19,3 +19,8 @@ export interface IEvent {
   dateId: string;
   statusId: string;
 }
+
+export interface ActionReturnType<T> {
+  data: T | null;
+  error: string | null;
+}

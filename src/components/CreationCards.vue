@@ -17,7 +17,9 @@
     </div>
     <div class="flex gap-4">
       <ul>
-        <li v-for="event in events.values" :key="event.id">{{ event.id }}</li>
+        <li v-for="record in events" :key="record[1].id">
+          {{ record[1].id }}
+        </li>
       </ul>
     </div>
   </div>

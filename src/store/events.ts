@@ -14,7 +14,6 @@ export const useEventsStore = defineStore("events", () => {
 
   const getEventByTaskAndDate = (taskId: ITask["id"], dateId: IDate["id"]) => {
     const event = events.get(taskId + dateId);
-    console.log(event);
     return event;
     // console.log(taskId, dateId);
     // events.forEach((event: IEvent) => {
@@ -40,32 +39,43 @@ export const useEventsStore = defineStore("events", () => {
       id: uuidv4(),
     };
     events.set(taskId + dateId, eventToCreate);
-    console.log(eventToCreate);
     return { data: eventToCreate, error: null };
   };
 
   const deleteEvent = (id: IEvent["id"]) => {
     events.forEach((event: IEvent) => {
       if (event.id === id) {
-        events.delete(event);
+        events.delete(event.taskId + event.dateId);
+        return { data: "Событие удалено", error: null };
       }
     });
+    return { data: null, error: "Такого события не существует" };
   };
 
-  const deleteEventByTask = (taskId: ITask["id"]) => {
+  const deleteEventsByTask = (taskId: ITask["id"]) => {
+    let deletedEvents = 0;
     events.forEach((event: IEvent) => {
       if (event.taskId === taskId) {
-        events.delete(event);
+        events.delete(event.taskId + event.dateId);
+        deletedEvents -= -1; // :)
       }
     });
+    return deletedEvents > 0
+      ? { data: "События удалены", error: null }
+      : { data: null, error: "Таких событий не существует" };
   };
 
-  const deleteEventByDate = (dateId: IDate["id"]) => {
+  const deleteEventsByDate = (dateId: IDate["id"]) => {
+    let deletedEvents = 0;
     events.forEach((event: IEvent) => {
       if (event.dateId === dateId) {
-        events.delete(event);
+        events.delete(event.taskId + event.dateId);
+        deletedEvents += 1;
       }
     });
+    return deletedEvents > 0
+      ? { data: "События удалены", error: null }
+      : { data: null, error: "Таких событий не существует" };
   };
 
   return {
@@ -73,7 +83,7 @@ export const useEventsStore = defineStore("events", () => {
     createEvent,
     getEventByTaskAndDate,
     deleteEvent,
-    deleteEventByTask,
-    deleteEventByDate,
+    deleteEventsByTask,
+    deleteEventsByDate,
   };
 });

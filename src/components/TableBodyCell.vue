@@ -1,6 +1,6 @@
 <template>
   <td
-    class="p-2 w-32 text-center font-normal border border-[#d9d9d9]"
+    class="p-2 w-32 text-center font-normal border border-[#d9d9d9] cursor-pointer"
     @click="onClick"
   >
     <div v-if="!props.event">Создать</div>
@@ -35,7 +35,6 @@ const eventsStore = useEventsStore();
 const onClick = () => {
   // Если события в данной ячейке не существует
   if (!props.event) {
-    console.log(props.taskId, props.dateId);
     const { data, error } = eventsStore.createEvent(
       props.taskId,
       props.dateId,
@@ -48,15 +47,9 @@ const onClick = () => {
     toast.success("Событие успешно создано");
   } else {
     // Если событие существует
+    eventsStore.deleteEvent(props.event.id);
     toast.success("Событие уже есть");
   }
-
-  // if (event) {
-  //   console.log("second click");
-  // } else {
-  //   console.log("first click");
-  //   isClicked.value = true;
-  // }
 };
 </script>
 

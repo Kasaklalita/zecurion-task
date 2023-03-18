@@ -1,15 +1,16 @@
 <template>
-  <table class="">
-    <tr>
+  <table class="main-table">
+    <tr class="flex w-full overflow-x-hidden">
       <TableHeaderCell value="Задачи" />
       <TableHeaderCell
         v-for="date in datesList"
         :key="date.id"
         :value="date.value.toString()"
+        @click="() => deleteDate(date.id)"
       />
     </tr>
     <tr v-for="task in tasks" :key="task.id">
-      <TableHeaderCell :value="task.title" />
+      <TableHeaderCell :value="task.title" @click="() => deleteTask(task.id)" />
       <TableBodyCell
         v-for="date in datesList"
         :key="date.id"
@@ -24,13 +25,16 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { storeToRefs } from "pinia";
+import { useToast } from "vue-toastification";
 import { useTasksStore } from "../store/tasks";
 import TableHeaderCell from "./TableHeaderCell.vue";
 import TableBodyCell from "./TableBodyCell.vue";
-import { IDate } from "../store/types";
+import { IDate, ITask } from "../store/types";
 import { useDatesStore } from "../store/dates";
 import { useStatusesStore } from "../store/statuses";
 import { useEventsStore } from "../store/events";
+
+const toast = useToast();
 
 // const store = useMainStore();
 // const { tasks, dates } = storeToRefs(store);
@@ -41,10 +45,6 @@ const eventsStore = useEventsStore();
 
 const { tasks } = storeToRefs(tasksStore);
 const { dates } = storeToRefs(datesStore);
-const { statuses } = storeToRefs(statusesStore);
-const { events } = storeToRefs(eventsStore);
-
-console.log(tasksStore.getTask("asdff"));
 
 const datesList = computed(() => {
   return dates.value.map((date: IDate) => ({
@@ -53,11 +53,29 @@ const datesList = computed(() => {
   }));
 });
 
-const eventsList = computed(() => {
-  return events;
-});
+const deleteTask = (id: ITask["id"]) => {
+  const { data, error } = tasksStore.deleteTask(id);
+  if (!data || error) {
+    toast.error(error ?? "Что-то пошло не так");
+    return;
+  }
+  toast.success("Задача успешно удалена");
+};
 
-// const eventsTable;
+const deleteDate = (id: IDate["id"]) => {
+  const { data, error } = datesStore.deleteDate(id);
+  if (!data || error) {
+    toast.error(error ?? "Что-то пошло не так");
+    return;
+  }
+  toast.success("Дата успешно удалена");
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+.main-table {
+  width: 1024px;
+  max-width: 1024px;
+  overflow-x: auto;
+}
+</style>
