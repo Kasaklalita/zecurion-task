@@ -1,6 +1,6 @@
 <template>
-  <table class="main-table">
-    <tr class="flex w-full overflow-x-hidden">
+  <table class="main-table" v-if="isTableOk">
+    <tr class="">
       <TableHeaderCell value="Задачи" />
       <TableHeaderCell
         v-for="date in datesList"
@@ -20,6 +20,10 @@
       />
     </tr>
   </table>
+  <h2 v-else>
+    Чтобы создать таблицу, создайте хотя бы одну задачу, одну дату и один
+    статус.
+  </h2>
 </template>
 
 <script setup lang="ts">
@@ -45,6 +49,7 @@ const eventsStore = useEventsStore();
 
 const { tasks } = storeToRefs(tasksStore);
 const { dates } = storeToRefs(datesStore);
+const { statuses } = storeToRefs(statusesStore);
 
 const datesList = computed(() => {
   return dates.value.map((date: IDate) => ({
@@ -70,12 +75,20 @@ const deleteDate = (id: IDate["id"]) => {
   }
   toast.success("Дата успешно удалена");
 };
+
+const isTableOk = computed(() => {
+  return (
+    tasks.value.length > 0 &&
+    dates.value.length > 0 &&
+    statuses.value.length > 0
+  );
+});
 </script>
 
 <style scoped>
 .main-table {
-  width: 1024px;
+  /* width: 1024px;
   max-width: 1024px;
-  overflow-x: auto;
+  overflow-x: auto; */
 }
 </style>
