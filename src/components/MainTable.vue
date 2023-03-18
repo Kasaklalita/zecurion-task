@@ -15,6 +15,7 @@
         :key="date.id"
         :date-id="date.id"
         :task-id="task.id"
+        :event="eventsStore.getEventByTaskAndDate(task.id, date.id) ?? null"
       />
     </tr>
   </table>
@@ -43,11 +44,17 @@ const { dates } = storeToRefs(datesStore);
 const { statuses } = storeToRefs(statusesStore);
 const { events } = storeToRefs(eventsStore);
 
+console.log(tasksStore.getTask("asdff"));
+
 const datesList = computed(() => {
   return dates.value.map((date: IDate) => ({
     id: date.id,
     value: date.value.toString(),
   }));
+});
+
+const eventsList = computed(() => {
+  return events;
 });
 
 // const eventsTable;

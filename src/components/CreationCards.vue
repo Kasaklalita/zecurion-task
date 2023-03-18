@@ -17,13 +17,7 @@
     </div>
     <div class="flex gap-4">
       <ul>
-        <li v-for="task in tasks" :key="task.id">{{ task.title }}</li>
-      </ul>
-      <ul>
-        <li v-for="date in dates" :key="date.id">{{ date.value }}</li>
-      </ul>
-      <ul>
-        <li v-for="status in statuses" :key="status.id">{{ status.value }}</li>
+        <li v-for="event in events.values" :key="event.id">{{ event.id }}</li>
       </ul>
     </div>
   </div>
@@ -33,6 +27,7 @@
 import { storeToRefs } from "pinia";
 import { useToast } from "vue-toastification";
 import { useDatesStore } from "../store/dates";
+import { useEventsStore } from "../store/events";
 import { useStatusesStore } from "../store/statuses";
 import { useTasksStore } from "../store/tasks";
 import AddItemCard from "./AddItemCard.vue";
@@ -44,6 +39,9 @@ const toast = useToast();
 const tasksStore = useTasksStore();
 const datesStore = useDatesStore();
 const statusesStore = useStatusesStore();
+const eventsStore = useEventsStore();
+
+const { events } = storeToRefs(eventsStore);
 
 const onTaskCreated = (task: string) => {
   const { data, error } = tasksStore.createTask(task);

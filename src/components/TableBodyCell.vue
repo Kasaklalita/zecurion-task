@@ -3,7 +3,7 @@
     class="p-2 w-32 text-center font-normal border border-[#d9d9d9]"
     @click="onClick"
   >
-    <div v-if="!event.id">Создать</div>
+    <div v-if="!props.event">Создать</div>
     <div v-else>-</div>
   </td>
 </template>
@@ -12,28 +12,31 @@
 import { ref, defineProps, reactive } from "vue";
 import { storeToRefs } from "pinia";
 import { useToast } from "vue-toastification";
-import { useMainStore } from "../store";
 import { IEvent } from "../store/types";
+import { useEventsStore } from "../store/events";
 
 const toast = useToast();
 
 interface ITableBodyCellProps {
   dateId: string;
   taskId: string;
-  event?: IEvent | null;
+  event: IEvent | null;
 }
 
 const props = defineProps<ITableBodyCellProps>();
 
-const store = useMainStore();
-const { events } = storeToRefs(store);
+const eventsStore = useEventsStore();
 
-const event = reactive<IEvent | Partial<IEvent>>({ id: "" });
+// const store = useMainStore();
+// const { events } = storeToRefs(store);
+
+// const event = reactive<IEvent | Partial<IEvent>>({ id: "" });
 
 const onClick = () => {
   // Если события в данной ячейке не существует
-  if (!event.id) {
-    const { data, error } = store.createEvent(
+  if (!props.event) {
+    console.log(props.taskId, props.dateId);
+    const { data, error } = eventsStore.createEvent(
       props.taskId,
       props.dateId,
       "123"
@@ -43,12 +46,9 @@ const onClick = () => {
       return;
     }
     toast.success("Событие успешно создано");
-    event.dateId = data.dateId;
-    event.taskId = data.taskId;
-    event.id = data.id;
-    event.statusId = data.statusId;
   } else {
     // Если событие существует
+    toast.success("Событие уже есть");
   }
 
   // if (event) {

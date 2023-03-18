@@ -3,13 +3,26 @@ import { v4 as uuidv4 } from "uuid";
 import { reactive } from "vue";
 import { IDate, IEvent, IStatus, ITask } from "./types";
 
+interface EventKey {
+  taskId: ITask["id"];
+  dateId: IDate["id"];
+}
+
 export const useEventsStore = defineStore("events", () => {
-  const events = reactive<IEvent[]>([]);
+  // const events = reactive<Set<IEvent>>(new Set());
+  const events = reactive<Map<string, IEvent>>(new Map());
 
   const getEventByTaskAndDate = (taskId: ITask["id"], dateId: IDate["id"]) => {
-    return events.find(
-      (event: IEvent) => event.taskId === taskId && event.dateId === dateId
-    );
+    const event = events.get(taskId + dateId);
+    console.log(event);
+    return event;
+    // console.log(taskId, dateId);
+    // events.forEach((event: IEvent) => {
+    //   if (event.taskId === taskId && event.dateId === dateId) {
+    //     return event;
+    //   }
+    // });
+    // return null;
   };
 
   const createEvent = (
@@ -26,10 +39,41 @@ export const useEventsStore = defineStore("events", () => {
       statusId,
       id: uuidv4(),
     };
-    events.push(eventToCreate);
+    events.set(taskId + dateId, eventToCreate);
     console.log(eventToCreate);
     return { data: eventToCreate, error: null };
   };
 
-  return { events, createEvent, getEventByTaskAndDate };
+  const deleteEvent = (id: IEvent["id"]) => {
+    events.forEach((event: IEvent) => {
+      if (event.id === id) {
+        events.delete(event);
+      }
+    });
+  };
+
+  const deleteEventByTask = (taskId: ITask["id"]) => {
+    events.forEach((event: IEvent) => {
+      if (event.taskId === taskId) {
+        events.delete(event);
+      }
+    });
+  };
+
+  const deleteEventByDate = (dateId: IDate["id"]) => {
+    events.forEach((event: IEvent) => {
+      if (event.dateId === dateId) {
+        events.delete(event);
+      }
+    });
+  };
+
+  return {
+    events,
+    createEvent,
+    getEventByTaskAndDate,
+    deleteEvent,
+    deleteEventByTask,
+    deleteEventByDate,
+  };
 });
