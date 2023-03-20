@@ -3,25 +3,29 @@ import { v4 as uuidv4 } from "uuid";
 import { reactive } from "vue";
 import { IDate, IEvent, IStatus, ITask } from "./types";
 
-interface EventKey {
-  taskId: ITask["id"];
-  dateId: IDate["id"];
-}
-
 export const useEventsStore = defineStore("events", () => {
-  // const events = reactive<Set<IEvent>>(new Set());
-  const events = reactive<Map<string, IEvent>>(new Map());
+  // const events = reactive<Map<string, IEvent>>(new Map());
+  const events = reactive<IEvent[]>([]);
 
   const getEventByTaskAndDate = (taskId: ITask["id"], dateId: IDate["id"]) => {
-    const event = events.get(taskId + dateId);
-    return event;
-    // console.log(taskId, dateId);
-    // events.forEach((event: IEvent) => {
-    //   if (event.taskId === taskId && event.dateId === dateId) {
-    //     return event;
-    //   }
-    // });
-    // return null;
+    let foundEvent;
+    events.forEach((event: IEvent) => {
+      if (event.taskId === taskId && event.dateId === dateId) {
+        foundEvent = event;
+      }
+    });
+    return foundEvent;
+  };
+
+  const getEvent = (id: IEvent["id"]) => {
+    let foundEvent;
+    events.forEach((value) => {
+      if (value.id === id) {
+        foundEvent = value;
+        return;
+      }
+    });
+    return foundEvent;
   };
 
   const createEvent = (
@@ -38,28 +42,30 @@ export const useEventsStore = defineStore("events", () => {
       statusId,
       id: uuidv4(),
     };
-    events.set(taskId + dateId, eventToCreate);
+    events.push(eventToCreate);
     return { data: eventToCreate, error: null };
   };
 
   const deleteEvent = (id: IEvent["id"]) => {
-    events.forEach((event: IEvent) => {
-      if (event.id === id) {
-        events.delete(event.taskId + event.dateId);
-        return { data: "Событие удалено", error: null };
+    for (let i = 0; i < events.length; i++) {
+      if (events[i].id === id) {
+        const deletedEvent = events[i];
+        events.splice(i, 1);
+        return { data: deletedEvent, error: null };
       }
-    });
+    }
     return { data: null, error: "Такого события не существует" };
   };
 
   const deleteEventsByTask = (taskId: ITask["id"]) => {
     let deletedEvents = 0;
-    events.forEach((event: IEvent) => {
-      if (event.taskId === taskId) {
-        events.delete(event.taskId + event.dateId);
-        deletedEvents -= -1; // :)
+    for (let i = 0; i < events.length; i++) {
+      if (events[i].taskId === taskId) {
+        events.splice(i, 1);
+        i -= 1;
+        deletedEvents += 1;
       }
-    });
+    }
     return deletedEvents > 0
       ? { data: "События удалены", error: null }
       : { data: null, error: "Таких событий не существует" };
@@ -67,15 +73,32 @@ export const useEventsStore = defineStore("events", () => {
 
   const deleteEventsByDate = (dateId: IDate["id"]) => {
     let deletedEvents = 0;
-    events.forEach((event: IEvent) => {
-      if (event.dateId === dateId) {
-        events.delete(event.taskId + event.dateId);
+    for (let i = 0; i < events.length; i++) {
+      if (events[i].dateId === dateId) {
+        events.splice(i, 1);
+        i -= 1;
         deletedEvents += 1;
       }
-    });
+    }
     return deletedEvents > 0
       ? { data: "События удалены", error: null }
       : { data: null, error: "Таких событий не существует" };
+  };
+
+  const setEventStatus = (id: IEvent["id"], statusId: IStatus["id"]) => {
+    let updatedEvent;
+    events.forEach((event: IEvent) => {
+      if (event.id === id) {
+        event.statusId = statusId;
+        updatedEvent = event;
+      }
+    });
+    return updatedEvent
+      ? { data: updatedEvent, error: null }
+      : {
+          data: null,
+          error: "Такого события не существует",
+        };
   };
 
   return {
@@ -85,5 +108,7 @@ export const useEventsStore = defineStore("events", () => {
     deleteEvent,
     deleteEventsByTask,
     deleteEventsByDate,
+    setEventStatus,
+    getEvent,
   };
 });

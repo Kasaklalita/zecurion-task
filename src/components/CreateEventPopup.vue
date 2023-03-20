@@ -1,54 +1,70 @@
 <template>
   <div class="create-event-popup">
-    <!-- <select name="" id="" @change="onSelect">
-      <option v-for="status in statuses" :key="status.id">
-        {{ status.value }}
-      </option>
-    </select> -->
-    <PrimaryDropdown :options="statusesToSelect" @select="onSelect" />
-    <!-- <ColorPicker @color-change="onColorChange" /> -->
+    <PrimaryDropdown
+      :default-value="selectedStatus"
+      :options="statusesToSelect"
+      @select="onSelect"
+    />
     <PrimaryButton text="Готово" @click="onDoneClick" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { ref, defineEmits, reactive, computed, unref } from "vue";
+import { useToast } from "vue-toastification";
+import { ref, defineEmits, reactive, computed, unref, defineProps } from "vue";
 import { ColorPicker } from "vue-accessible-color-picker";
 import { useStatusesStore } from "../store/statuses";
 import PrimaryButton from "./PrimaryButton.vue";
 import PrimaryDropdown from "./PrimaryDropdown.vue";
-import { IStatus } from "../store/types";
+import { IEvent, IStatus } from "../store/types";
+import { useEventsStore } from "../store/events";
 
+const toast = useToast();
+
+interface CreateEventProps {
+  event: IEvent;
+}
+
+const props = defineProps<CreateEventProps>();
 const emits = defineEmits(["edit"]);
 
 const statusesStore = useStatusesStore();
 const { statuses } = storeToRefs(statusesStore);
+const eventsStore = useEventsStore();
 
 const statusesToSelect = computed(() => {
   return unref(statuses);
 });
 
-// const selectedColor = ref("#ffffff");z
-const selectedStatus = reactive<IStatus | { id: "" }>({ id: "" });
-
-// const onColorChange = (data: any) => {
-//   selectedColor.value = data.colors.hex;
-// };
+const selectedStatus = reactive<IStatus | { id: string; value: string }>(
+  statusesStore.getStatusById(props.event.statusId) ?? { id: "", value: "" }
+);
 
 const onSelect = (status: IStatus) => {
-  console.log(status);
+  selectedStatus.id = status.id;
 };
 
 const onDoneClick = () => {
-  if (!selectedStatus.id) {
-    emits("edit", { selectedStatus });
+  if (selectedStatus.id) {
+    const { data, error } = eventsStore.setEventStatus(
+      props.event.id,
+      selectedStatus.id
+    );
+    if (!data || error) {
+      toast.error(error ?? "Что-то пошло не так");
+      return;
+    }
+    toast.success("Событие обновлено");
+    emits("edit");
+  } else {
+    toast.error("Выберите статус события");
   }
 };
 </script>
 
 <style scoped>
 .create-event-popup {
-  @apply absolute top-0 left-0 p-4 bg-white shadow-lg rounded-lg flex flex-col w-60 items-center gap-6;
+  @apply p-4 bg-white shadow-lg rounded-lg flex flex-col w-60 items-center gap-6;
 }
 </style>

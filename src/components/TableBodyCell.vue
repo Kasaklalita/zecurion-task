@@ -6,17 +6,12 @@
     <div v-if="!props.event">
       <i class="fa-solid fa-plus text-xl"></i>
     </div>
-    <div v-else>
-      <i class="fa-regular fa-pen-to-square"></i>
-      <teleport to="body" v-if="isPopupShown">
-        <CreateEventPopup />
-      </teleport>
-    </div>
+    <div v-else><i class="fa-regular fa-pen-to-square"></i></div>
   </td>
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, reactive } from "vue";
+import { ref, defineProps, reactive, defineEmits } from "vue";
 import { storeToRefs } from "pinia";
 import { useToast } from "vue-toastification";
 import { IEvent } from "../store/types";
@@ -33,6 +28,7 @@ interface ITableBodyCellProps {
 }
 
 const props = defineProps<ITableBodyCellProps>();
+const emits = defineEmits(["cell-click"]);
 
 const eventsStore = useEventsStore();
 
@@ -52,8 +48,7 @@ const onClick = () => {
     isPopupShown.value = true;
   } else {
     // Если событие существует
-    // eventsStore.deleteEvent(props.event.id);
-    // toast.success("Событие уже есть");
+    emits("cell-click", props.event);
   }
 };
 </script>

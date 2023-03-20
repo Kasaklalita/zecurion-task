@@ -44,5 +44,25 @@ export const useTasksStore = defineStore("tasks", () => {
       : { data: null, error: "Такой задачи не существует" };
   };
 
-  return { tasks, createTask, getTask, deleteTask };
+  const updateTask = (
+    id: ITask["id"],
+    newTitle: ITask["title"]
+  ): ActionReturnType<ITask> => {
+    if (newTitle.trim() === "") {
+      return { data: null, error: "Название не дожно быть пустым" };
+    }
+    let updatedIndex = -1;
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasks[i].id === id) {
+        updatedIndex = i;
+        tasks[i].title = newTitle;
+        break;
+      }
+    }
+    return updatedIndex !== -1
+      ? { data: tasks[updatedIndex], error: null }
+      : { data: null, error: "Такой задачи не существует" };
+  };
+
+  return { tasks, createTask, getTask, deleteTask, updateTask };
 });

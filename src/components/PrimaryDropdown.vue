@@ -1,5 +1,5 @@
 <template>
-  <div class="primary-dropdown">
+  <div v-if="props.options" class="primary-dropdown">
     <div
       v-if="isDropdownOpened"
       class="primary-dropdown__background"
@@ -45,18 +45,23 @@ import { computed } from "vue";
 export interface DropdownControlProps {
   options: { id: string; value: string }[];
   // defaultValue?: string;
+  defaultValue: { id: string; value: string };
 }
 
 const props = withDefaults(defineProps<DropdownControlProps>(), {
   // defaultValue: "Выберите значение:",
 });
-console.log(props.options[0]);
+
 const emit = defineEmits(["select"]);
 
-const selectedItem = reactive({
-  id: props.options[0].id,
-  value: props.options[0].value,
-});
+const selectedItem = reactive(
+  props.options.length > 0
+    ? {
+        id: props.options[0].id,
+        value: props.options[0].value,
+      }
+    : { id: "", value: "" }
+);
 const isDropdownOpened = ref(false);
 
 const openDropdown = () => {

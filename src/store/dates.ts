@@ -44,5 +44,25 @@ export const useDatesStore = defineStore("dates", () => {
     // Добавить удаление связных событий
   };
 
-  return { dates, createDate, getDate, deleteDate };
+  const updateDate = (
+    id: IDate["id"],
+    newDate: IDate["value"]
+  ): ActionReturnType<IDate> => {
+    if (!newDate.toString()) {
+      return { data: null, error: "Дата не должна быть пустой" };
+    }
+    let updatedIndex = -1;
+    for (let i = 0; i < dates.length; i++) {
+      if (dates[i].id === id) {
+        updatedIndex = i;
+        dates[i].value = newDate;
+        break;
+      }
+    }
+    return updatedIndex !== -1
+      ? { data: dates[updatedIndex], error: null }
+      : { data: null, error: "Такой даты не существует" };
+  };
+
+  return { dates, createDate, getDate, deleteDate, updateDate };
 });

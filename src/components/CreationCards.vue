@@ -15,21 +15,12 @@
         @create-item="onStatusCreated"
       />
     </div>
-    <div class="flex gap-4">
-      <ul>
-        <li v-for="record in events" :key="record[1].id">
-          {{ record[1].id }}
-        </li>
-      </ul>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
 import { useToast } from "vue-toastification";
 import { useDatesStore } from "../store/dates";
-import { useEventsStore } from "../store/events";
 import { useStatusesStore } from "../store/statuses";
 import { useTasksStore } from "../store/tasks";
 import AddItemCard from "./AddItemCard.vue";
@@ -41,9 +32,6 @@ const toast = useToast();
 const tasksStore = useTasksStore();
 const datesStore = useDatesStore();
 const statusesStore = useStatusesStore();
-const eventsStore = useEventsStore();
-
-const { events } = storeToRefs(eventsStore);
 
 const onTaskCreated = (task: string) => {
   const { data, error } = tasksStore.createTask(task);
