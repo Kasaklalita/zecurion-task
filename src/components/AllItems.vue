@@ -43,6 +43,18 @@
         @edit="editDate"
       />
     </ModalContainer>
+    <ModalContainer
+      v-if="isStatusEditPopupShown"
+      :background-style="{ zIndex: 10 }"
+      @background-click="() => (isStatusEditPopupShown = false)"
+    >
+      <EditPopup
+        :id="selectedStatusId"
+        title="Редактирование статуса"
+        placeholder="Значение статуса"
+        @edit="editStatus"
+      />
+    </ModalContainer>
   </div>
 </template>
 
@@ -132,6 +144,7 @@ const onDateDelete = (id: string) => {
 };
 
 const onStatusEdit = (id: string) => {
+  console.log("status edit");
   isStatusEditPopupShown.value = true;
   selectedStatusId.value = id;
 };
@@ -169,6 +182,16 @@ const editDate = ({ id, newValue }: { id: string; newValue: Date }) => {
     return;
   }
   toast.success("Дата изменена");
+};
+
+const editStatus = ({ id, newValue }: { id: string; newValue: string }) => {
+  isStatusEditPopupShown.value = false;
+  const { data, error } = statusesStore.updateStatus(id, newValue);
+  if (!data || error) {
+    toast.error(error ?? "Что-то пошло не так");
+    return;
+  }
+  toast.success("Статус изменён");
 };
 </script>
 

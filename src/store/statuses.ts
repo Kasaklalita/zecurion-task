@@ -1,10 +1,12 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import { reactive } from "vue";
+import { useEventsStore } from "./events";
 import { IStatus, ActionReturnType } from "./types";
 
 export const useStatusesStore = defineStore("statuses", () => {
   const statuses = reactive<IStatus[]>([]);
+  const eventsStore = useEventsStore();
 
   const getStatusByName = (name: string): ActionReturnType<IStatus> => {
     let foundStatus;
@@ -59,7 +61,8 @@ export const useStatusesStore = defineStore("statuses", () => {
         statuses.splice(i, 1);
       }
     }
-
+    console.log(id);
+    eventsStore.deleteEventsByStatus(id);
     return deletedStatus
       ? { data: deletedStatus, error: null }
       : { data: null, error: "Такого статуса не существует" };

@@ -85,6 +85,21 @@ export const useEventsStore = defineStore("events", () => {
       : { data: null, error: "Таких событий не существует" };
   };
 
+  const deleteEventsByStatus = (statusId: IStatus["id"]) => {
+    let deletedEvents = 0;
+    for (let i = 0; i < events.length; i++) {
+      if (events[i].statusId === statusId) {
+        // Просто очищаем статус, но не удаляем событие
+        events[i].statusId = "";
+        i -= 1;
+        deletedEvents += 1;
+      }
+    }
+    return deletedEvents > 0
+      ? { data: "Статусы очищены", error: null }
+      : { data: null, error: "Таких событий не существует" };
+  };
+
   const setEventStatus = (id: IEvent["id"], statusId: IStatus["id"]) => {
     let updatedEvent;
     events.forEach((event: IEvent) => {
@@ -110,5 +125,6 @@ export const useEventsStore = defineStore("events", () => {
     deleteEventsByDate,
     setEventStatus,
     getEvent,
+    deleteEventsByStatus,
   };
 });

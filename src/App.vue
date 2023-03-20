@@ -6,9 +6,11 @@
         <p>
           Выполненное тестовое задание для Zecurion от Полиенко В. С. Условие
           задания доступно
-          <a href="./assets/ТЗ_Frontend Developer JS.docx" class="text-blue-500"
+          <a
+            href="https://github.com/Kasaklalita/zecurion-task/blob/master/src/assets/%D0%A2%D0%97_Frontend%20Developer%20JS.docx"
+            class="text-blue-500"
             >здесь</a
-          >.
+          >. Рекомендуется прочитать Readme перед началом работы.
         </p>
       </div>
       <CreationCards />
