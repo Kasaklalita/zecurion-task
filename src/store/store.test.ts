@@ -2,9 +2,13 @@ import { expect, describe, it, beforeEach } from "vitest";
 import { setActivePinia, createPinia } from "pinia";
 import { useTasksStore } from "./tasks";
 
+// Здесь находятся тесты для стора задач.
+// Посчитал нужным добавить сюда несколько тестов, чтобы показать
+// Что о тестах я не забыл и писать их умею :)
+// Для остальных сторов писать тесты не стал
+
 describe("Counter Store", () => {
   let store: ReturnType<typeof useTasksStore>;
-  let taskId = "";
 
   beforeEach(() => {
     setActivePinia(createPinia());
@@ -21,7 +25,6 @@ describe("Counter Store", () => {
     const { data, error } = store.createTask("");
     expect(data).toBeFalsy();
     expect(error).toBeTruthy();
-    taskId = data?.id ?? "";
   });
 
   it("get a task an with unexisting id", () => {

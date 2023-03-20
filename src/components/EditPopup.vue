@@ -13,26 +13,10 @@
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { useToast } from "vue-toastification";
-import {
-  ref,
-  defineEmits,
-  reactive,
-  computed,
-  unref,
-  defineProps,
-  withDefaults,
-} from "vue";
-import { ColorPicker } from "vue-accessible-color-picker";
-import { useStatusesStore } from "../store/statuses";
+import { ref, defineEmits, defineProps, withDefaults } from "vue";
 import PrimaryButton from "./PrimaryButton.vue";
-import PrimaryDropdown from "./PrimaryDropdown.vue";
-import { IEvent, IStatus } from "../store/types";
-import { useEventsStore } from "../store/events";
 import PrimaryInput from "./PrimaryInput.vue";
 
-const toast = useToast();
 const inputValue = ref("");
 
 interface EditPopupProps {

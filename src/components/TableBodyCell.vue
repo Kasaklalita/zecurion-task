@@ -11,12 +11,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, reactive, defineEmits } from "vue";
-import { storeToRefs } from "pinia";
+import { ref, defineProps, defineEmits } from "vue";
 import { useToast } from "vue-toastification";
 import { IEvent } from "../store/types";
 import { useEventsStore } from "../store/events";
-import CreateEventPopup from "./CreateEventPopup.vue";
 
 const toast = useToast();
 const isPopupShown = ref(false);

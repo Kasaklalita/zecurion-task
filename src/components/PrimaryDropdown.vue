@@ -10,7 +10,7 @@
       :class="dropdownMainClass"
     >
       <p class="primary-dropdown__selected-item-text">
-        {{ selectedItem.value }}
+        {{ selectedValue }}
       </p>
       <i class="fa-solid fa-caret-down" @click="openDropdown"></i>
     </div>
@@ -33,30 +33,20 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref, defineEmits, withDefaults, reactive } from "vue";
+import { defineProps, ref, defineEmits, toRaw, unref } from "vue";
 import { computed } from "vue";
 
 export interface DropdownControlProps {
   options: { id: string; value: string }[];
-  // defaultValue?: string;
   defaultValue: { id: string; value: string };
 }
 
-const props = withDefaults(defineProps<DropdownControlProps>(), {
-  // defaultValue: "Выберите значение:",
-});
+const props = defineProps<DropdownControlProps>();
 
 const emit = defineEmits(["select"]);
 
-const selectedItem = reactive(
-  props.defaultValue ? props.defaultValue : { id: "", value: "" }
-);
-// props.options.length > 0
-//   ? {
-//       id: props.options[0].id,
-//       value: props.options[0].value,
-//     }
-//   : { id: "", value: "" }
+const selectedValue = ref(toRaw(props.defaultValue.value) ?? "");
+
 const isDropdownOpened = ref(false);
 
 const openDropdown = () => {
@@ -68,9 +58,9 @@ const closeDropdown = () => {
 };
 
 const changeSelectedItem = (selected: { id: string; value: string }) => {
+  console.log(selected);
   closeDropdown();
-  selectedItem.id = selected.id;
-  selectedItem.value = selected.value;
+  selectedValue.value = unref(toRaw(selected).value);
   emit("select", selected);
 };
 
@@ -78,13 +68,6 @@ const dropdownMainClass = computed(() => {
   return {
     "primary-dropdown__main_opened": isDropdownOpened.value,
     "primary-dropdown__main_closed": !isDropdownOpened.value,
-  };
-});
-
-const dropdownOpenerClass = computed(() => {
-  return {
-    "primary-dropdown__open-button_opened": isDropdownOpened.value,
-    "primary-dropdown__open-button_closed": !isDropdownOpened.value,
   };
 });
 </script>
@@ -163,11 +146,6 @@ const dropdownOpenerClass = computed(() => {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-.primary-dropdown__item:hover,
-.primary-dropdown__item:active {
-}
-
 /* animations */
 .options-enter-active,
 .options-leave-active {
@@ -193,16 +171,5 @@ const dropdownOpenerClass = computed(() => {
 .item_theme_light:hover,
 .item_theme_light:active {
   background: rgba(0, 98, 213, 0.25);
-}
-
-/*dark theme block*/
-.dark .dark\:main_theme_dark {
-}
-
-.dark .dark\:options_theme_dark {
-}
-
-.dark .dark\:item_theme_dark:hover,
-.dark .dark\:item_theme_dark:active {
 }
 </style>

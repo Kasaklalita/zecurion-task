@@ -1,7 +1,7 @@
 <template>
   <div class="create-event-popup">
     <PrimaryDropdown
-      :default-value="selectedStatus"
+      :default-value="toRaw(selectedStatus)"
       :options="statusesToSelect"
       @select="onSelect"
     />
@@ -12,8 +12,14 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useToast } from "vue-toastification";
-import { ref, defineEmits, reactive, computed, unref, defineProps } from "vue";
-import { ColorPicker } from "vue-accessible-color-picker";
+import {
+  defineEmits,
+  reactive,
+  computed,
+  unref,
+  defineProps,
+  toRaw,
+} from "vue";
 import { useStatusesStore } from "../store/statuses";
 import PrimaryButton from "./PrimaryButton.vue";
 import PrimaryDropdown from "./PrimaryDropdown.vue";

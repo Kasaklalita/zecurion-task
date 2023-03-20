@@ -47,18 +47,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, reactive, unref } from "vue";
+import { computed, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useToast } from "vue-toastification";
 import { useTasksStore } from "../store/tasks";
-import TableHeaderCell from "./TableHeaderCell.vue";
-import TableBodyCell from "./TableBodyCell.vue";
-import { IDate, IEvent, IStatus, ITask } from "../store/types";
+import { IDate, IStatus, ITask } from "../store/types";
 import { useDatesStore } from "../store/dates";
 import { useStatusesStore } from "../store/statuses";
-import { useEventsStore } from "../store/events";
 import ModalContainer from "./ModalContainer.vue";
-import CreateEventPopup from "./CreateEventPopup.vue";
 import ItemsList from "./ItemsList.vue";
 import EditPopup from "./EditPopup.vue";
 

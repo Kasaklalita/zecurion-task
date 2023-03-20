@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, reactive, unref } from "vue";
+import { computed, ref, toRaw } from "vue";
 import { storeToRefs } from "pinia";
 import { useToast } from "vue-toastification";
 import { useTasksStore } from "../store/tasks";
@@ -71,12 +71,12 @@ const { tasks } = storeToRefs(tasksStore);
 const { dates } = storeToRefs(datesStore);
 const { statuses } = storeToRefs(statusesStore);
 
-const selectedEvent = reactive<IEvent>({
+const selectedEvent = {
   id: "",
   statusId: "",
   taskId: "",
   dateId: "",
-});
+};
 
 const datesList = computed(() => {
   return dates.value.map((date: IDate) => ({
@@ -113,15 +113,9 @@ const isTableOk = computed(() => {
 
 const onCellClick = (event: IEvent) => {
   isCellEditShown.value = true;
-  Object.assign(selectedEvent, unref(event));
+  Object.assign(selectedEvent, toRaw(event));
   console.log(event);
 };
 </script>
 
-<style scoped>
-.main-table {
-  /* width: 1024px;
-  max-width: 1024px;
-  overflow-x: auto; */
-}
-</style>
+<style scoped></style>
