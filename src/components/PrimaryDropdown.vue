@@ -12,13 +12,7 @@
       <p class="primary-dropdown__selected-item-text">
         {{ selectedItem.value }}
       </p>
-      <img
-        :src="imageUrl"
-        alt=""
-        @click="openDropdown"
-        class="primary-dropdown__open-button"
-        :class="dropdownOpenerClass"
-      />
+      <i class="fa-solid fa-caret-down" @click="openDropdown"></i>
     </div>
     <Transition name="options">
       <div
@@ -55,13 +49,14 @@ const props = withDefaults(defineProps<DropdownControlProps>(), {
 const emit = defineEmits(["select"]);
 
 const selectedItem = reactive(
-  props.options.length > 0
-    ? {
-        id: props.options[0].id,
-        value: props.options[0].value,
-      }
-    : { id: "", value: "" }
+  props.defaultValue ? props.defaultValue : { id: "", value: "" }
 );
+// props.options.length > 0
+//   ? {
+//       id: props.options[0].id,
+//       value: props.options[0].value,
+//     }
+//   : { id: "", value: "" }
 const isDropdownOpened = ref(false);
 
 const openDropdown = () => {

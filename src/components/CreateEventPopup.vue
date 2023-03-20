@@ -38,7 +38,10 @@ const statusesToSelect = computed(() => {
 });
 
 const selectedStatus = reactive<IStatus | { id: string; value: string }>(
-  statusesStore.getStatusById(props.event.statusId) ?? { id: "", value: "" }
+  statusesStore.getStatusById(props.event.statusId).data ?? {
+    id: "",
+    value: "",
+  }
 );
 
 const onSelect = (status: IStatus) => {

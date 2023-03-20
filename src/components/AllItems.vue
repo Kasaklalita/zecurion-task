@@ -71,7 +71,6 @@ const isStatusEditPopupShown = ref(false);
 const tasksStore = useTasksStore();
 const datesStore = useDatesStore();
 const statusesStore = useStatusesStore();
-const eventsStore = useEventsStore();
 
 const { tasks } = storeToRefs(tasksStore);
 const { dates } = storeToRefs(datesStore);
@@ -114,7 +113,12 @@ const onTaskEdit = (id: string) => {
 };
 
 const onTaskDelete = (id: string) => {
-  tasksStore.deleteTask(id);
+  const { data, error } = tasksStore.deleteTask(id);
+  if (!data || error) {
+    toast.error(error ?? "Что-то пошло не так");
+    return;
+  }
+  toast.success("Задача удалена");
 };
 
 const onDateEdit = (id: string) => {
@@ -123,7 +127,12 @@ const onDateEdit = (id: string) => {
 };
 
 const onDateDelete = (id: string) => {
-  datesStore.deleteDate(id);
+  const { data, error } = datesStore.deleteDate(id);
+  if (!data || error) {
+    toast.error(error ?? "Что-то пошло не так");
+    return;
+  }
+  toast.success("Дата удалена");
 };
 
 const onStatusEdit = (id: string) => {
@@ -132,7 +141,12 @@ const onStatusEdit = (id: string) => {
 };
 
 const onStatusDelete = (id: string) => {
-  statusesStore.deleteStatus(id);
+  const { data, error } = statusesStore.deleteStatus(id);
+  if (!data || error) {
+    toast.error(error ?? "Что-то пошло не так");
+    return;
+  }
+  toast.success("Статус удалён");
 };
 
 const editTask = ({

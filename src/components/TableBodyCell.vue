@@ -38,7 +38,7 @@ const onClick = () => {
     const { data, error } = eventsStore.createEvent(
       props.taskId,
       props.dateId,
-      "123"
+      ""
     );
     if (!data || error) {
       toast.error(error ?? "Что-то пошло не так");
