@@ -1,18 +1,52 @@
-# Vue 3 + TypeScript + Vite
+# Тестовое задание для Zecurion
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Выполненное тестовое задание для Zecurion от [Полиенко В. С.](https://github.com/Kasaklalita) Условие задания доступно [здесь](https://github.com/Kasaklalita/zecurion-task/blob/master/src/assets/%D0%A2%D0%97_Frontend%20Developer%20JS.docx).
 
-## Recommended IDE Setup
+Приложение построено на Vue3 + Vite + TS. Также использовались:
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+- pinia в качестве хранилища
+- vue-toastification для уведомлений
+- vitest для тестировки
+- eslint в качестве линтера
+- prettier, чтобы всё было красиво :)
+- tailwind в качестве CSS-фреймворка
+- Docker для сборки
 
-## Type Support For `.vue` Imports in TS
+Используются husky pre-commit хуки, перед каждым коммитом запускается линтер и тесты.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+## Запуск через Docker
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+Приложение может быть запущено посредством Docker. Для этого нужно перейти в папку проекта и выполнить следующую команду:
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+```bash
+docker build -t zecurion .
+```
+
+Когда сборка завершится, проект нужно запустить и перейти по http://localhost:5173/
+
+```bash
+docker run -dp 5173:5173 zecurion
+```
+
+## Запуск через npm
+
+Чтобы запустить проект через npm, требуется зайти в папку проекта и выполнить следующие команды, после чего перейти по предложенной ссылке:
+
+```bash
+npm install
+npm run dev
+```
+
+## Инструкция по применению
+
+В приложении имеются четыре сущности: задача, дата, статус, событие. Сущности можно создавать и редактировать, для всего предусмотрена
+
+- Задача. Задача может быть создана в соответствующей карточке. Имена задач могут повторяться, в то же время имя не может быть пустым. Задачи можно редактировать - изменять их имена.
+
+- Дата. Дата может быть создана во второй карточке. Даты не обязаны быть уникальными. Даты можно редактировать.
+
+- Статус. Статус можно создать в третьей карточке. Статусы должны быть уникальными. Если это не так, будет выведено сообщение об ошибке. Статус не может быть пустым. Статусы можно редактировать.
+
+- События создаются на пересечении задачи и даты в таблице. У события всегда есть собственный ID, ID задачи и ID даты, но может отсутствовать ID статуса. Чтобы добавить задаче статус, нужно нажать на иконку редактирования статуса в таблице и выбрать подходящий статус. У событий можно изменять исключительно ID статуса. Список событий выводится после таблицы.
+
+Спасибо за внимание! Буду рад любым замечаниям и предложениям.
